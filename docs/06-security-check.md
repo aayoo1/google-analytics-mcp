@@ -33,7 +33,11 @@ It ends with four things to check by hand in the console: the consent screen is 
 ## What it found on my project
 
 - All three `/mcp` endpoints returned 401. All secrets came from Secret Manager. No service account keys, no API keys, no public buckets.
-- **One real finding:** an older MCP service was running as the default compute service account, which has Editor on the whole project. If that service were ever compromised, it could change almost anything. The fix is a dedicated service account with only what it needs, like this one has.
+- **One real finding:** an older MCP service was running as the default compute service account, which has Editor on the whole project. If that service were ever compromised, it could change almost anything.
+
+  Fixed without a rebuild: a new service account with only Firestore access and read access to that service's own secrets, then `gcloud run services update <service> --service-account <new-account>`. After checking it worked (401, 302 and a real query from Claude), I removed the default account's access to those secrets. Keep the previous revision name handy: `gcloud run services update-traffic <service> --to-revisions=<old-revision>=100` rolls back.
+
+  The default compute account still has Editor on the project. Cloud Build may use it for `--source` deploys, so test before removing it.
 - An unused Desktop OAuth client left over from an earlier experiment. Worth deleting.
 
 ## Next

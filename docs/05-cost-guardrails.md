@@ -42,7 +42,7 @@ Read only. For every Cloud Run service it shows min and max instances and whethe
 What I found: no always on resources apart from the one warm instance above. Two things to watch:
 
 - **Container images.** Every deploy adds an image. Three services sat at about 270 MB of the free 0.5 GB before this one. A cleanup policy that keeps the last two images per service stops it growing.
-- **Secret versions.** Three servers with three secrets each, plus old versions from bad pastes, go past the free 6. Each extra version is about USD 0.06 a month. Destroy versions you are sure are wrong.
+- **Secret versions.** Three servers with three secrets each, plus old versions from bad pastes, go past the free 6. Each extra version is about USD 0.06 a month. Disabled versions still count; only destroyed ones stop costing. Disable old versions first, check nothing breaks, then destroy the ones you are sure are wrong.
 
 ## Expected cost
 
